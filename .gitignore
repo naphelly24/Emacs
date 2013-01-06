@@ -1,0 +1,6 @@
+# comments begin with #
+*.*~
+elpa/
+eshell/
+evil/
+url/
