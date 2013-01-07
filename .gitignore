@@ -4,3 +4,5 @@ elpa/
 eshell/
 evil/
 url/
+color-theme-solarized/
+test/
