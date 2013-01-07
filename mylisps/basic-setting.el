@@ -10,7 +10,7 @@
 ;;(menu-bar-mode -1)
 
 (setq ring-bell-function 'ignore)
-(blink-cursor-mode -1)
+;(blink-cursor-mode -1)
 
 (setq kill-ring-max 200)
 
@@ -79,7 +79,14 @@ Replaces default behaviour of comment-dwim, when it inserts comment at the end o
     (comment-dwim arg)))
 (global-set-key "\M-;" 'qiang-comment-dwim-line)
 
-
+;;use f11 to toggle fullscreen
+(global-set-key [f11] 'my-fullscreen)
+(defun my-fullscreen ()
+(interactive)
+(x-send-client-message
+nil 0 nil "_NET_WM_STATE" 32
+'(2 "_NET_WM_STATE_FULLSCREEN" 0))
+)
 
 
 
