@@ -1,9 +1,5 @@
-# comments begin with #
-*.*~
-elpa/
-eshell/
-evil/
-url/
-color-theme-solarized/
-test/
-\#*\#
+el-get
+*.elc
+*.el~
+*.el#
+.*
