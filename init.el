@@ -57,14 +57,14 @@
 ;;
 ;; Note: el-get-install requires git, so we know we have at least that.
 ;;
-					;(when (el-get-executable-find "cvs")
-					;(add-to-list 'my:el-get-packages 'emacs-goodies-el)) ; the debian addons for emacs
+;(when (el-get-executable-find "cvs")
+;  (add-to-list 'my:el-get-packages 'emacs-goodies-el)) ; the debian addons for emacs
 
-					;(when (el-get-executable-find "svn")
-					;(loop for p in '(psvn ; M-x svn-status
-					;yasnippet	; powerful snippet mode
-					;)
-					;do (add-to-list 'my:el-get-packages p)))
+(when (el-get-executable-find "svn")
+  (loop for p in '(psvn ; M-x svn-status
+                   yasnippet	; powerful snippet mode
+                   )
+        do (add-to-list 'my:el-get-packages p)))
 
 (setq my:el-get-packages
       (append
@@ -182,4 +182,3 @@
       (comment-or-uncomment-region (line-beginning-position) (line-end-position))
     (comment-dwim arg)))
 (global-set-key "\M-;" 'qiang-comment-dwim-line) 
-
