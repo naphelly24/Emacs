@@ -1,3 +1,12 @@
+(setq *win32* (eq system-type 'windows-nt) )
+(setq *cygwin* (eq system-type 'cygwin) )
+(setq *linux* (or (eq system-type 'gnu/linux) (eq system-type 'linux)) )
+(setq *unix* (or *linux* (eq system-type 'usg-unix-v) (eq system-type 'berkeley-unix)) )
+(setq *linux-x* (and window-system *linux*) )
+
+(push "/home/hachen/env/bin" exec-path) ; my python virtualenv
+;(add-to-list 'load-path (expand-file-name "~/.emacs.d"))
+
 (require 'cl)               ; common lisp goodies, loop
 
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
@@ -30,9 +39,9 @@
 		   (global-set-key (kbd "M-x") 'smex)
 		   (global-set-key (kbd "M-X") 'smex-major-mode-commands)))
 
-   (:name magit	; git meet emacs, and a binding
-	  :after (progn
-		   (global-set-key (kbd "C-x C-z") 'magit-status)))
+   ;; (:name magit	; git meet emacs, and a binding
+   ;; 	  :after (progn
+   ;; 		   (global-set-key (kbd "C-x C-z") 'magit-status)))
 
    (:name goto-last-change	; move pointer back to last change
 	  :after (progn
@@ -50,8 +59,11 @@
    color-theme
    zencoding-mode	; http://www.emacswiki.org/emacs/ZenCoding
    ))
-
-
+(if *win32*
+  (loop for p in '(cygwin-mount
+                    setup-cygwin
+                    )
+        do (add-to-list 'my:el-get-packages p)))
 ;;
 ;; Some recipes require extra tools to be installed
 ;;
@@ -73,9 +85,24 @@
 
 (el-get 'sync my:el-get-packages)       ; install new packages and init already installed packages
 
+;; Let's use CYGWIN bash... (seems cygwin-mount and setup-cygwin have solved this???)
+;;
+;; (setq binary-process-input t) 
+;; (setq w32-quote-process-args ?\") 
+;; (setq shell-file-name "bash") ;; or sh if you rename your bash executable to sh. 
+;; (setenv "SHELL" shell-file-name) 
+;; (setq explicit-shell-file-name shell-file-name) 
+;; (setq explicit-sh-args '("-login" "-i"))
 
 
 
+;; win32 auto configuration, assuming that cygwin is installed at "c:/cygwin"
+(if *win32*
+	(progn
+		(setq cygwin-mount-cygwin-bin-directory "c:/cygwin/bin")
+		(require 'setup-cygwin)
+		;(setenv "HOME" "c:/cygwin/home/hachen") ;; better to set HOME env in GUI
+		))
 
 ;; avoid compiz manager rendering bugs
 (add-to-list 'default-frame-alist '(alpha . 100))
@@ -85,7 +112,7 @@
 (setq windmove-wrap-around t)
 
 ;; use ido for minibuffer completion
-(require 'ido)
+;(require 'ido)
 (ido-mode t)
 (setq ido-save-directory-list-file "~/.emacs.d/.ido.last")
 (setq ido-enable-flex-matching t)
@@ -139,27 +166,10 @@
 
 (setq suggest-key-bindings 1)		;show key binding after using command
 
-
-;; M-x shell is a nice shell interface to use, let's make it colorful. If
-;; you need a terminal emulator rather than just a shell, consider M-x term
-;; instead.
-(autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
-(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
-;; If you do use M-x term, you will notice there's line mode that acts like
-;; emacs buffers, and there's the default char mode that will send your
-;; input char-by-char, so that curses application see each of your key
-;; strokes.
-;;
-;; The default way to toggle between them is C-c C-j and C-c C-k, let's
-;; better use just one key to do the same.
-;; (require 'term)
-;; (define-key term-raw-map (kbd "C-'") 'term-line-mode)
-;; (define-key term-mode-map (kbd "C-'") 'term-char-mode)
-
-;; ;; Have C-y act as usual in term-mode, to avoid C-' C-y C-'
-;; ;; Well the real default would be C-c C-j C-y C-c C-k.
-;; (define-key term-raw-map (kbd "C-y") 'term-paste)
-
+;;----------------------------------------------------------------------
+;; key-bind setting
+;;----------------------------------------------------------------------
+(global-set-key (kbd "C-h") 'backward-delete-char-untabify)
 
 (setq scroll-margin 0
       scroll-conservatively 100000
@@ -168,7 +178,7 @@
 ;; recentf.el setting
 ;;----------------------------------------------------------------------
 (recentf-mode 1)
-(setq recentf-max-menu-items 25)
+(setq recentf-max-menu-items 50)
 (global-set-key (kbd "C-x f") 'recentf-open-files)
 
 ;;----------------------------------------------------------------------
@@ -182,3 +192,7 @@
       (comment-or-uncomment-region (line-beginning-position) (line-end-position))
     (comment-dwim arg)))
 (global-set-key "\M-;" 'qiang-comment-dwim-line) 
+
+;; mode line settings
+(set-face-attribute 'mode-line nil :box nil) ;disable 3D-style highlighting of mode line
+(set-face-background 'mode-line "snow4")
