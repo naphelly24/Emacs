@@ -59,11 +59,11 @@
    color-theme
    zencoding-mode	; http://www.emacswiki.org/emacs/ZenCoding
    ))
-(if *win32*
-  (loop for p in '(cygwin-mount
-                    setup-cygwin
-                    )
-        do (add-to-list 'my:el-get-packages p)))
+;(if *win32*
+  ;(loop for p in '(cygwin-mount
+                    ;setup-cygwin
+                    ;)
+        ;do (add-to-list 'my:el-get-packages p)))
 ;;
 ;; Some recipes require extra tools to be installed
 ;;
@@ -72,11 +72,11 @@
 ;(when (el-get-executable-find "cvs")
 ;  (add-to-list 'my:el-get-packages 'emacs-goodies-el)) ; the debian addons for emacs
 
-(when (el-get-executable-find "svn")
-  (loop for p in '(psvn ; M-x svn-status
-                   yasnippet	; powerful snippet mode
-                   )
-        do (add-to-list 'my:el-get-packages p)))
+;(when (el-get-executable-find "svn")
+  ;(loop for p in '(psvn ; M-x svn-status
+                   ;yasnippet	; powerful snippet mode
+                   ;)
+        ;do (add-to-list 'my:el-get-packages p)))
 
 (setq my:el-get-packages
       (append
@@ -97,12 +97,12 @@
 
 
 ;; win32 auto configuration, assuming that cygwin is installed at "c:/cygwin"
-(if *win32*
-	(progn
-		(setq cygwin-mount-cygwin-bin-directory "c:/cygwin/bin")
-		(require 'setup-cygwin)
-		;(setenv "HOME" "c:/cygwin/home/hachen") ;; better to set HOME env in GUI
-		))
+;(if *win32*
+	;(progn
+		;(setq cygwin-mount-cygwin-bin-directory "c:/cygwin/bin")
+		;(require 'setup-cygwin)
+		;;(setenv "HOME" "c:/cygwin/home/hachen") ;; better to set HOME env in GUI
+		;))
 
 ;; avoid compiz manager rendering bugs
 (add-to-list 'default-frame-alist '(alpha . 100))
@@ -130,10 +130,16 @@
 (global-set-key [f11] 'fullscreen)
 
 ;; font settings
-(set-face-attribute 'default nil :font "Consolas-12")
-;(set-face-font 'default "Monospace-15")
-;(set-frame-font "Consolas-12")
-
+;; (set-face-attribute 'default nil :font "Consolas-12")
+;; Setting English Font
+(set-face-attribute
+  'default nil :font "Consolas 12")
+ 
+;; Chinese Font
+(dolist (charset '(kana han symbol cjk-misc bopomofo))
+    (set-fontset-font (frame-parameter nil 'font)
+                      charset
+                      (font-spec :family "Microsoft Yahei" :size 14)))
 
 ;----------------------------------------------------------------------
 ;basic setting
