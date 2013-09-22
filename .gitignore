@@ -4,3 +4,6 @@ el-get
 *.el#
 .*
 *.dat
+eshell
+elpa
+test
